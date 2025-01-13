@@ -22,7 +22,11 @@ class _HomePageState extends State<HomePage> {
   ];
   void _tapped(int index) {
     setState(() {
-      displayXO[index] = oTurn ? 'O' : 'X';
+      if (oTurn && displayXO[index] != '') {
+        displayXO[index] = 'O';
+      } else if (!oTurn && displayXO[index] != '') {
+        displayXO[index] = 'X';
+      }
       oTurn = !oTurn;
       _checkWinner();
     });
@@ -78,7 +82,7 @@ class _HomePageState extends State<HomePage> {
         return AlertDialog(
           title: Text(
             'WINNER : ' + winner,
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.white),
           ),
         );
       },
@@ -89,34 +93,45 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[800],
-      body: GridView.builder(
-        itemCount: 9,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              _tapped(index);
-            },
+      body: Column(
+        children: [
+          Expanded(
             child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey[700]!,
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  displayXO[index],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40,
-                  ),
-                ),
-              ),
+              color: Colors.red,
             ),
-          );
-        },
+          ),
+          Expanded(
+            child: GridView.builder(
+              itemCount: 9,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    _tapped(index);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey[700]!,
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        displayXO[index],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
