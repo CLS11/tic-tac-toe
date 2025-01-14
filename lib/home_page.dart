@@ -8,6 +8,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int oScore = 0;
+  int xScore = 0;
+  var myTextStyle = const TextStyle(
+    color: Colors.white,
+    fontSize: 30,
+  );
   bool oTurn = true;
   late List<String> displayXO = [
     '',
@@ -77,16 +83,41 @@ class _HomePageState extends State<HomePage> {
 
   void _showWinner(String winner) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          actions: [
+            FloatingActionButton(
+              onPressed: () {
+                _clearBoard();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
           title: Text(
             'WINNER : ' + winner,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
         );
       },
     );
+    if (winner == 'O') {
+      oScore++;
+    } else if (winner == 'X') {
+      xScore++;
+    }
+    _clearBoard;
+  }
+
+  void _clearBoard() {
+    setState(() {
+      for (var i = 0; i < 9; i++) {
+        displayXO[i] = '';
+      }
+    });
   }
 
   @override
@@ -97,10 +128,44 @@ class _HomePageState extends State<HomePage> {
         children: [
           Expanded(
             child: Container(
-              color: Colors.red,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Player X',
+                        style: myTextStyle,
+                      ),
+                      Text(
+                        xScore.toString(),
+                        style: myTextStyle,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Player O',
+                        style: myTextStyle,
+                      ),
+                      Text(
+                        oScore.toString(),
+                        style: myTextStyle,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
+            flex: 3,
             child: GridView.builder(
               itemCount: 9,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -120,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                     child: Center(
                       child: Text(
                         displayXO[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 40,
                         ),
@@ -130,6 +195,9 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+          ),
+          Expanded(
+            child: Container(),
           ),
         ],
       ),
