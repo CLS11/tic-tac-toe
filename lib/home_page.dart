@@ -8,6 +8,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int filledBoxes = 0;
   int oScore = 0;
   int xScore = 0;
   var myTextStyle = const TextStyle(
@@ -30,8 +31,10 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       if (oTurn && displayXO[index] != '') {
         displayXO[index] = 'O';
+        filledBoxes += 1;
       } else if (!oTurn && displayXO[index] != '') {
         displayXO[index] = 'X';
+        filledBoxes += 1;
       }
       oTurn = !oTurn;
       _checkWinner();
@@ -78,6 +81,8 @@ class _HomePageState extends State<HomePage> {
         displayXO[6] == displayXO[2] &&
         displayXO[6] != '') {
       _showWinner(displayXO[6]);
+    } else if (filledBoxes == 9) {
+      _showDrawDialog();
     }
   }
 
@@ -112,12 +117,40 @@ class _HomePageState extends State<HomePage> {
     _clearBoard;
   }
 
+  void _showDrawDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actions: [
+            FloatingActionButton(
+              onPressed: () {
+                _clearBoard();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+          title: Text(
+            'DRAW',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        );
+      },
+    );
+
+    _clearBoard;
+  }
+
   void _clearBoard() {
     setState(() {
       for (var i = 0; i < 9; i++) {
         displayXO[i] = '';
       }
     });
+    filledBoxes = 0;
   }
 
   @override
