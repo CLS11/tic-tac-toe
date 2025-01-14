@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +28,21 @@ class _HomePageState extends State<HomePage> {
     '',
     '',
   ];
+
+  static var newFont = GoogleFonts.pressStart2P(
+    textStyle: TextStyle(
+      color: Colors.black,
+      letterSpacing: 3,
+    ),
+  );
+  static var newFontWhite = GoogleFonts.pressStart2P(
+    textStyle: TextStyle(
+      color: Colors.white,
+      letterSpacing: 3,
+      fontSize: 15,
+    ),
+  );
+
   void _tapped(int index) {
     setState(() {
       if (oTurn && displayXO[index] != '') {
@@ -102,9 +118,7 @@ class _HomePageState extends State<HomePage> {
           ],
           title: Text(
             'WINNER : ' + winner,
-            style: TextStyle(
-              color: Colors.white,
-            ),
+            style: newFontWhite,
           ),
         );
       },
@@ -133,9 +147,7 @@ class _HomePageState extends State<HomePage> {
           ],
           title: Text(
             'DRAW',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+            style: newFontWhite,
           ),
         );
       },
@@ -218,10 +230,7 @@ class _HomePageState extends State<HomePage> {
                     child: Center(
                       child: Text(
                         displayXO[index],
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 40,
-                        ),
+                        style: newFontWhite,
                       ),
                     ),
                   ),
